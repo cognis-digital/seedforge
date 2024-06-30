@@ -37,3 +37,4 @@
 2025-12-15T17:25:35  feat: with great power comes great test coverage
 2026-04-13T12:42:42  chore: one does not simply skip CI
 2024-06-14T11:23:13  test(output): skip binary files by sniffing
+2024-06-30T18:40:20  build(scan): add a dry-run flag
