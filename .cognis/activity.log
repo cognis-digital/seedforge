@@ -40,3 +40,4 @@
 2024-06-30T18:40:20  build(scan): add a dry-run flag
 2024-07-16T13:57:27  chore: BLACKBOOK redaction pass
 2024-08-02T08:14:34  perf(config): document the config keys
+2024-08-19T15:31:41  ci(detect): add a --format json alias
