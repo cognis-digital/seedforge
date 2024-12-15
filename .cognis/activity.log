@@ -46,3 +46,4 @@
 2024-10-08T12:22:02  docs(tests): handle CRLF line endings
 2024-11-12T19:39:09  test(format): support stdin as a source
 2024-11-28T14:56:16  build(parser): wire the MCP tool schema
+2024-12-15T09:13:23  chore: one does not simply skip CI
