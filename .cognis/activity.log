@@ -51,3 +51,4 @@
 2025-01-17T11:47:37  perf(format): add a --quiet mode
 2025-02-03T18:04:44  refactor: future me will understand this
 2025-02-20T13:21:51  fix(ci): dedupe overlapping findings
+2025-03-09T08:38:58  refactor(scoring): memoize repeated lookups
