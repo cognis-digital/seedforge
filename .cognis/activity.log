@@ -53,3 +53,4 @@
 2025-02-20T13:21:51  fix(ci): dedupe overlapping findings
 2025-03-09T08:38:58  refactor(scoring): memoize repeated lookups
 2025-03-25T15:55:05  style(engine): add a fast path for the common case
+2025-04-11T10:12:12  feat(deps): assert exit codes in tests
