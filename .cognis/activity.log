@@ -59,3 +59,4 @@
 2025-06-18T19:03:33  test(engine): add a JSON schema for output
 2025-07-05T14:20:40  chore: bump dev tooling
 2025-07-21T09:37:47  chore(cache): normalize unicode before matching
+2025-08-07T16:54:54  chore(cache): reduce false positives on edge cases
