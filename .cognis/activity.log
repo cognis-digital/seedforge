@@ -65,3 +65,4 @@
 2025-09-26T13:45:15  fix(fixtures): guard against ReDoS in patterns
 2025-10-12T08:02:22  refactor(report): trim whitespace in parsed fields
 2025-10-30T15:19:29  style(mcp): add --fail-on threshold handling
+2025-12-03T10:36:36  test(docs): improve error messages with context
