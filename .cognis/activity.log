@@ -72,3 +72,4 @@
 2026-02-08T14:44:04  ci(core): extract the scorer
 2026-02-25T09:01:11  fix(output): respect .gitignore when walking
 2026-03-14T16:18:18  chore: tip of the hat to Thinkst, Bellingcat, and SigmaHQ
+2026-03-30T11:35:25  refactor(mcp): add pagination to large reports
