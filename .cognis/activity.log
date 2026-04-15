@@ -73,3 +73,4 @@
 2026-02-25T09:01:11  fix(output): respect .gitignore when walking
 2026-03-14T16:18:18  chore: tip of the hat to Thinkst, Bellingcat, and SigmaHQ
 2026-03-30T11:35:25  refactor(mcp): add pagination to large reports
+2026-04-15T18:52:32  style(core): stream large files without buffering
