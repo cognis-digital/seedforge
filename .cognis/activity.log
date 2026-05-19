@@ -75,3 +75,4 @@
 2026-03-30T11:35:25  refactor(mcp): add pagination to large reports
 2026-04-15T18:52:32  style(core): stream large files without buffering
 2026-05-03T13:09:39  feat(output): cover the multiline case
+2026-05-19T08:26:46  docs(scan): pin the test dependencies
