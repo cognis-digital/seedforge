@@ -1,0 +1,10 @@
+{
+  "name": "@cognis/seedforge",
+  "version": "0.2.0",
+  "description": "JavaScript port of seedforge (Cognis Neural Suite)",
+  "bin": {
+    "seedforge": "index.js"
+  },
+  "license": "LicenseRef-COCL-1.0",
+  "type": "module"
+}
