@@ -1,28 +1,11 @@
-"""SEEDFORGE - Synthetic test-data generator with referential integrity.
-
-Deterministic, dependency-free fake data for databases and APIs. Define tables
-in a JSON schema, declare foreign keys, and SEEDFORGE generates rows whose
-relationships actually hold together (every FK points at a real PK).
-"""
-from .core import (
-    Schema,
-    Generator,
-    SeedForgeError,
-    SchemaError,
-    generate,
-    FIELD_TYPES,
-)
-
-TOOL_NAME = "seedforge"
-TOOL_VERSION = "1.0.0"
-
-__all__ = [
-    "Schema",
-    "Generator",
-    "SeedForgeError",
-    "SchemaError",
-    "generate",
-    "FIELD_TYPES",
-    "TOOL_NAME",
-    "TOOL_VERSION",
-]
+"""seedforge — part of the Cognis Neural Suite."""
+try:  # re-export the tool's public API + identity from core
+    from seedforge.core import *  # noqa: F401,F403
+except Exception:  # pragma: no cover
+    pass
+try:
+    from seedforge.core import TOOL_NAME, TOOL_VERSION
+except Exception:  # pragma: no cover
+    TOOL_NAME = "seedforge"
+    TOOL_VERSION = "0.1.0"
+__version__ = TOOL_VERSION
