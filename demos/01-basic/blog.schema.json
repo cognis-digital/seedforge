@@ -1,0 +1,31 @@
+{
+  "tables": {
+    "users": {
+      "count": 10,
+      "fields": {
+        "id": { "type": "pk", "start": 1 },
+        "name": "name",
+        "email": "email",
+        "status": { "type": "enum", "choices": ["active", "pending", "banned"] }
+      }
+    },
+    "posts": {
+      "count": 25,
+      "fields": {
+        "id": { "type": "pk", "start": 1000 },
+        "title": { "type": "word", "words": 3 },
+        "published_on": { "type": "date", "year_min": 2023, "year_max": 2025 },
+        "author_id": { "type": "ref", "ref": "users.id" }
+      }
+    },
+    "comments": {
+      "count": 60,
+      "fields": {
+        "id": { "type": "pk", "start": 5000 },
+        "body": { "type": "word", "words": 5 },
+        "post_id": { "type": "ref", "ref": "posts.id" },
+        "user_id": { "type": "ref", "ref": "users.id" }
+      }
+    }
+  }
+}
