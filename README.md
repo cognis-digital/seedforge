@@ -16,7 +16,7 @@
 </div>
 
 ```bash
-pip install cognis-seedforge
+pip install "git+https://github.com/cognis-digital/seedforge.git"
 seedforge scan .            # → prioritized findings in seconds
 ```
 
@@ -47,7 +47,7 @@ dev + data crossover, viral
 ## Quick start
 
 ```bash
-pip install cognis-seedforge
+pip install "git+https://github.com/cognis-digital/seedforge.git"
 seedforge --version
 seedforge scan .                       # scan current project
 seedforge scan . --format json         # machine-readable
