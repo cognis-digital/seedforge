@@ -20,6 +20,12 @@ pip install "git+https://github.com/cognis-digital/seedforge.git"
 seedforge scan .            # → prioritized findings in seconds
 ```
 
+<!-- cognis:layman:start -->
+## What is this?
+
+Seedforge creates realistic-looking fake data for testing software — things like pretend users, orders, or any set of related database tables you define. You describe the shape of your data in a simple JSON file, and seedforge instantly fills it with consistent, repeatable sample records where every link between tables (like "this order belongs to that customer") is guaranteed to be valid. It is for developers and data engineers who need reliable, reproducible test fixtures without manually crafting fake data or worrying about broken relationships between records.
+<!-- cognis:layman:end -->
+
 ## Contents
 
 - [Why seedforge?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
@@ -44,6 +50,42 @@ dev + data crossover, viral
 <div align="right"><a href="#top">↑ back to top</a></div>
 
 <a name="quick-start"></a>
+<!-- cognis:install:start -->
+## Install
+
+`seedforge` is source-available (not published to PyPI) — every method below installs
+straight from GitHub. Pick whichever you prefer; the one-line scripts auto-detect
+the best tool available on your machine.
+
+**One-liner (Linux / macOS):**
+```sh
+curl -fsSL https://raw.githubusercontent.com/cognis-digital/seedforge/HEAD/install.sh | sh
+```
+
+**One-liner (Windows PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/cognis-digital/seedforge/HEAD/install.ps1 | iex
+```
+
+**Or install manually — any one of:**
+```sh
+pipx install "git+https://github.com/cognis-digital/seedforge.git"     # isolated (recommended)
+uv tool install "git+https://github.com/cognis-digital/seedforge.git"  # uv
+pip install "git+https://github.com/cognis-digital/seedforge.git"      # pip
+```
+
+**From source:**
+```sh
+git clone https://github.com/cognis-digital/seedforge.git
+cd seedforge && pip install .
+```
+
+Then run:
+```sh
+seedforge --help
+```
+<!-- cognis:install:end -->
+
 ## Quick start
 
 ```bash
