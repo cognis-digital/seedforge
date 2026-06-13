@@ -8,7 +8,7 @@ import unittest
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from seedforge import TOOL_NAME, TOOL_VERSION, generate, Schema  # noqa: E402
-from seedforge.core import Generator, SchemaError, verify_integrity  # noqa: E402
+from seedforge.core import SchemaError, verify_integrity  # noqa: E402
 from seedforge.cli import main  # noqa: E402
 
 
