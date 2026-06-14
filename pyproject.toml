@@ -34,3 +34,6 @@ seedforge = "seedforge.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["seedforge"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
