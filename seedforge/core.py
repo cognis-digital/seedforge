@@ -17,6 +17,9 @@ import random
 from dataclasses import dataclass, field as dc_field
 from typing import Any, Callable, Dict, List, Optional
 
+TOOL_NAME = "seedforge"
+TOOL_VERSION = "1.7.5"
+
 
 class SeedForgeError(Exception):
     """Base error."""
@@ -44,13 +47,19 @@ def _gen_pk(rng: random.Random, idx: int, spec: dict) -> int:
 
 
 def _gen_int(rng: random.Random, idx: int, spec: dict) -> int:
-    return rng.randint(int(spec.get("min", 0)), int(spec.get("max", 1000)))
+    lo = int(spec.get("min", 0))
+    hi = int(spec.get("max", 1000))
+    if lo > hi:
+        raise SchemaError(f"int field 'min' ({lo}) must be <= 'max' ({hi})")
+    return rng.randint(lo, hi)
 
 
 def _gen_float(rng: random.Random, idx: int, spec: dict) -> float:
     lo = float(spec.get("min", 0.0))
     hi = float(spec.get("max", 1000.0))
     nd = int(spec.get("round", 2))
+    if lo > hi:
+        raise SchemaError(f"float field 'min' ({lo}) must be <= 'max' ({hi})")
     return round(lo + rng.random() * (hi - lo), nd)
 
 
@@ -96,7 +105,11 @@ def _gen_status(rng: random.Random, idx: int, spec: dict) -> str:
 
 
 def _gen_date(rng: random.Random, idx: int, spec: dict) -> str:
-    y = rng.randint(int(spec.get("year_min", 2020)), int(spec.get("year_max", 2025)))
+    ymin = int(spec.get("year_min", 2020))
+    ymax = int(spec.get("year_max", 2025))
+    if ymin > ymax:
+        raise SchemaError(f"date field 'year_min' ({ymin}) must be <= 'year_max' ({ymax})")
+    y = rng.randint(ymin, ymax)
     m = rng.randint(1, 12)
     d = rng.randint(1, 28)
     return f"{y:04d}-{m:02d}-{d:02d}"
@@ -163,7 +176,13 @@ class Schema:
         for tname, tdef in raw_tables.items():
             if not isinstance(tdef, dict):
                 raise SchemaError(f"table '{tname}' must be an object")
-            count = int(tdef.get("count", 10))
+            raw_count = tdef.get("count", 10)
+            try:
+                count = int(raw_count)
+            except (TypeError, ValueError):
+                raise SchemaError(
+                    f"table '{tname}' count must be an integer, got {raw_count!r}"
+                )
             if count < 0:
                 raise SchemaError(f"table '{tname}' count must be >= 0")
             raw_fields = tdef.get("fields")

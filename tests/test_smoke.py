@@ -137,6 +137,102 @@ class TestCLI(unittest.TestCase):
     def test_missing_file_nonzero(self):
         self.assertEqual(main(["gen", "/no/such/schema.json"]), 2)
 
+    def test_malformed_json_nonzero(self):
+        """A file that is not valid JSON returns exit 2 without a traceback."""
+        fd, path = tempfile.mkstemp(suffix=".json")
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            fh.write("{not: json")
+        try:
+            self.assertEqual(main(["gen", path]), 2)
+        finally:
+            os.remove(path)
+
+    def test_schema_error_nonzero(self):
+        """A schema with an unknown field type returns exit 2."""
+        bad = {"tables": {"t": {"count": 1, "fields": {"x": {"type": "nope"}}}}}
+        fd, path = tempfile.mkstemp(suffix=".json")
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            json.dump(bad, fh)
+        try:
+            self.assertEqual(main(["gen", path]), 2)
+        finally:
+            os.remove(path)
+
+    def test_zero_count_table_is_valid(self):
+        """A table with count=0 is valid and produces an empty list."""
+        schema = {"tables": {"t": {"count": 0, "fields": {"id": "pk"}}}}
+        data = generate(schema)
+        self.assertEqual(data["t"], [])
+
+    def test_verify_table_output_format(self):
+        """Verify subcommand in table format returns exit 0 for valid schema."""
+        path = self._write_schema()
+        try:
+            self.assertEqual(main(["--format", "table", "verify", path]), 0)
+        finally:
+            os.remove(path)
+
+
+class TestHardening(unittest.TestCase):
+    """Edge cases added during production hardening."""
+
+    def test_int_inverted_range_raises(self):
+        """int field with min > max raises SchemaError at generation time."""
+        bad = {"tables": {"a": {"count": 1, "fields": {"x": {"type": "int", "min": 100, "max": 5}}}}}
+        with self.assertRaises(SchemaError):
+            generate(bad)
+
+    def test_float_inverted_range_raises(self):
+        """float field with min > max raises SchemaError at generation time."""
+        bad = {"tables": {"a": {"count": 1, "fields": {"x": {"type": "float", "min": 50.0, "max": 1.0}}}}}
+        with self.assertRaises(SchemaError):
+            generate(bad)
+
+    def test_date_inverted_year_range_raises(self):
+        """date field with year_min > year_max raises SchemaError."""
+        bad = {"tables": {"a": {"count": 1, "fields": {"d": {"type": "date", "year_min": 2030, "year_max": 2020}}}}}
+        with self.assertRaises(SchemaError):
+            generate(bad)
+
+    def test_count_non_integer_raises(self):
+        """Non-integer count raises SchemaError with a clear message."""
+        bad = {"tables": {"a": {"count": "lots", "fields": {"x": "int"}}}}
+        with self.assertRaises(SchemaError) as ctx:
+            Schema.from_dict(bad)
+        self.assertIn("count", str(ctx.exception))
+
+    def test_nullable_ref_with_empty_parent(self):
+        """nullable ref to a zero-row parent table yields None values, not an error."""
+        schema = {
+            "tables": {
+                "parent": {"count": 0, "fields": {"id": "pk"}},
+                "child": {"count": 3, "fields": {
+                    "p_id": {"type": "ref", "ref": "parent.id", "nullable": True},
+                }},
+            }
+        }
+        data = generate(schema)
+        self.assertEqual(len(data["child"]), 3)
+        for row in data["child"]:
+            self.assertIsNone(row["p_id"])
+
+    def test_cli_int_inverted_range_exit_2(self):
+        """CLI returns exit 2 (not a raw traceback) for a schema with inverted int range."""
+        bad = {"tables": {"a": {"count": 1, "fields": {"x": {"type": "int", "min": 100, "max": 5}}}}}
+        fd, path = tempfile.mkstemp(suffix=".json")
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            json.dump(bad, fh)
+        try:
+            self.assertEqual(main(["gen", path]), 2)
+        finally:
+            os.remove(path)
+
+    def test_tool_name_and_version_in_core(self):
+        """TOOL_NAME and TOOL_VERSION are defined in core (not just __init__ fallback)."""
+        from seedforge.core import TOOL_NAME as CN, TOOL_VERSION as CV
+        self.assertEqual(CN, "seedforge")
+        self.assertTrue(CV)
+
 
 if __name__ == "__main__":
     unittest.main()

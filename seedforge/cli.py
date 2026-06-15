@@ -115,6 +115,12 @@ def main(argv: Optional[list] = None) -> int:
     except SeedForgeError as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
+    except KeyboardInterrupt:
+        print("\ninterrupted", file=sys.stderr)
+        return 130
+    except Exception as e:  # noqa: BLE001
+        print(f"error: {type(e).__name__}: {e}", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

@@ -1,6 +1,10 @@
-"""SEEDFORGE MCP server — exposes scan() as an MCP tool for Cognis.Studio."""
+"""SEEDFORGE MCP server — exposes generate() as an MCP tool."""
 from __future__ import annotations
-from seedforge.core import scan, to_json
+import json
+import sys
+
+from seedforge.core import generate, SeedForgeError
+
 
 def serve() -> int:
     """Start an MCP stdio server. Requires the optional 'mcp' extra:
@@ -8,15 +12,34 @@ def serve() -> int:
     """
     try:
         from mcp.server.fastmcp import FastMCP
-    except Exception:
-        print("Install the MCP extra: pip install 'cognis-seedforge[mcp]'")
+    except ImportError:
+        print(
+            "Install the MCP extra: pip install 'cognis-seedforge[mcp]'",
+            file=sys.stderr,
+        )
         return 1
     app = FastMCP("seedforge")
 
     @app.tool()
-    def seedforge_scan(target: str) -> str:
-        """Synthetic test-data generator with referential integrity. Returns JSON findings."""
-        return to_json(scan(target))
+    def seedforge_generate(schema: str, seed: int = 0) -> str:
+        """Generate synthetic test data from a JSON schema string.
+
+        Args:
+            schema: JSON-encoded schema object with a 'tables' key.
+            seed: integer master seed for deterministic output (default 0).
+
+        Returns:
+            JSON-encoded dict mapping table names to lists of row dicts.
+        """
+        try:
+            schema_dict = json.loads(schema)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"schema must be valid JSON: {exc}") from exc
+        try:
+            data = generate(schema_dict, seed=seed)
+        except SeedForgeError as exc:
+            raise ValueError(str(exc)) from exc
+        return json.dumps(data, default=str)
 
     app.run()
     return 0
